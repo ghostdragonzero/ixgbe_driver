@@ -399,7 +399,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         pool: &Arc<MemPool>,
     ) -> IxgbeResult<Self> {
         info!(
-            "Initializing ixgbe device@base: {:#x}, len: {:#x}, num_rx_queues: {}, num_tx_queues: {}",
+            "Initializing igb ghost device@base: {:#x}, len: {:#x}, num_rx_queues: {}, num_tx_queues: {}",
             base, len, num_rx_queues, num_tx_queues
         );
         // initialize RX and TX queue
