@@ -13,7 +13,7 @@ use core::time::Duration;
 use core::{mem, ptr};
 use smoltcp::wire::{EthernetFrame, PrettyPrinter};
 
-const DRIVER_NAME: &str = "ixgbe";
+const DRIVER_NAME: &str = "gb";
 
 const MAX_QUEUES: u16 = 64;
 
@@ -530,7 +530,22 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 // Private methods implementation
 impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
     /// Resets and initializes the device.
-    fn reset_and_init(&mut self, pool: &Arc<MemPool>) -> IxgbeResult {
+    fn reset_and_init(&mut self, _pool: &Arc<MemPool>) -> IxgbeResult {
+        let mut mii_reg = self.phy_read(0);
+        mii_reg = self.phy_read(0);
+        mii_reg |= 1<<9;
+        info!("rs_atu write_mii{:b}", mii_reg);
+        self.phy_write(0, mii_reg);
+        //let status = self.get_reg32(IGB_STATUS);
+        //info!("reset end status {:b}", status);
+        loop{
+            let status = self.get_reg32(IGB_STATUS);
+            info!("status {:b}", status);
+            if (status &(1 << 1)) == (1<<1){
+                break;
+            }
+        }
+        /* 
         info!("resetting device ixgbe device");
         // section 4.6.3.1 - disable all interrupts
         self.disable_interrupts();
@@ -587,6 +602,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         self.wait_for_link();
 
         info!("Success to initialize and reset Intel 10G NIC regs.");
+        */
 
         Ok(())
     }
@@ -963,6 +979,42 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         ivar |= msix_vector << index;
         self.set_reg32(IXGBE_IVAR(u32::from(queue) >> 1), ivar);
     }
+
+    fn phy_read(&mut self, offset:u32) -> u16{
+        let mut mdic_cmd = (offset << 16) | (1 << 21) | (1<<27);
+        self.set_reg32(IGB_MDIC, mdic_cmd);
+                loop {
+            mdic_cmd = self.get_reg32(IGB_MDIC);
+            if (mdic_cmd & MDIC_READY) == MDIC_READY{
+                break;
+            }
+            if (mdic_cmd & MDIC_ERROR) == MDIC_ERROR{
+                return 0;
+            }
+        }
+        return mdic_cmd as u16;
+    }
+
+    fn phy_write(&mut self, offset: u32, data:u16) -> bool{
+        let mut mdic_cmd = (offset << 16) | (1 << 21) | (data as u32) | (MDIC_WRITE);
+        info!("phy write cmd {:b}", mdic_cmd);
+        self.set_reg32(IGB_MDIC, mdic_cmd);
+
+        loop {
+            mdic_cmd = self.get_reg32(IGB_MDIC);
+            if (mdic_cmd & MDIC_READY) == MDIC_READY{
+                info!("write ok");
+                break;
+            }
+            if (mdic_cmd & MDIC_ERROR) == MDIC_READ{
+                error!("read error");
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
 
 unsafe impl<H: IxgbeHal, const QS: usize> Sync for IxgbeDevice<H, QS> {}
