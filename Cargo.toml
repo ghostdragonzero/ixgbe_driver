@@ -1,5 +1,5 @@
 [package]
-name = "ixgbe_driver"
+name = "ixgbe-driver"
 version = "0.1.0"
 edition = "2021"
 authors = ["KuangjuX <kuangjux@outlook.com>"]
