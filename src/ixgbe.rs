@@ -860,7 +860,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         //info!("reset end status {:b}", status);
         loop{
             let status = self.get_reg32(IGB_STATUS);
-            info!("status {:b}", status);
+            //info!("status {:b}", status);
             if (status &(1 << 1)) == (1<<1){
                 break;
             }
