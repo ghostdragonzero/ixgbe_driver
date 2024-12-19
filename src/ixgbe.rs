@@ -530,7 +530,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 // Private methods implementation
 impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
     /// Resets and initializes the device.
-    fn reset_and_init(&mut self, _pool: &Arc<MemPool>) -> IxgbeResult {
+    fn reset_and_init(&mut self, pool: &Arc<MemPool>) -> IxgbeResult {
 
         
         info!("resetting device ixgbe device");
