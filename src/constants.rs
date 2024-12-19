@@ -495,7 +495,7 @@ pub fn IXGBE_RXPBSIZE(i: u32) -> u32 {
     0x03C00 + i * 4
 }
 
-pub const IXGBE_RXCTRL: u32 = 0x01000;//update
+pub const IXGBE_RXCTRL: u32 = 0x0100;//update
 pub const IXGBE_DROPEN: u32 = 0x03D04;
 pub const IXGBE_RXPBSIZE_SHIFT: u32 = 10;
 pub const IXGBE_RXPBSIZE_MASK: u32 = 0x000FFC00;
