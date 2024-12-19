@@ -609,7 +609,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
     #[allow(clippy::needless_range_loop)]
     fn init_rx(&mut self, pool: &Arc<MemPool>) -> IxgbeResult {
         // disable rx while re-configuring it
-        self.wait_clear_flags32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
+        self.wait_clear_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
         self.set_reg32(IXGBE_RXDCTL(0), 0);
 
         // section 4.6.11.3.4 - allocate all queues and traffic to PB0
