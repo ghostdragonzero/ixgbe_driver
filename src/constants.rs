@@ -310,11 +310,11 @@ pub const IXGBE_MAX_SENSORS: u32 = 3;
 
 /* Interrupt Registers */
 pub const IXGBE_EICR: u32 = 0x01580;//update
-pub const IXGBE_EICS: u32 = 0x00808;
+pub const IXGBE_EICS: u32 = 0x01520;//update
 pub const IXGBE_EIMS: u32 = 0x01524;//update
 pub const IXGBE_EIMC: u32 = 0x01528;//uppdate
-pub const IXGBE_EIAC: u32 = 0x00810;
-pub const IXGBE_EIAM: u32 = 0x00890;
+pub const IXGBE_EIAC: u32 = 0x0152C;
+pub const IXGBE_EIAM: u32 = 0x01530;
 
 pub fn IXGBE_EICS_EX(i: u32) -> u32 {
     0x00A90 + i * 4
@@ -775,7 +775,7 @@ pub fn IXGBE_TXPBTHRESH(i: u32) -> u32 {
     0x04950 + i * 4
 } /* 8 of these 0 - 7 */
 
-pub const IXGBE_DMATXCTL_TE: u32 = 0x2; /* Transmit Enable *///update
+pub const IXGBE_DMATXCTL_TE: u32 = 1<<1; /* Transmit Enable *///update
 pub const IXGBE_DMATXCTL_NS: u32 = 0x2; /* No Snoop LSO hdr buffer */
 pub const IXGBE_DMATXCTL_GDV: u32 = 0x8; /* Global Double VLAN */
 pub const IXGBE_DMATXCTL_MDP_EN: u32 = 0x20; /* Bit 5 */

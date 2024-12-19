@@ -597,11 +597,20 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 
         // wait some time for the link to come up
         self.wait_for_link();
+        self.enabel_interrup();
 
         info!("Success to initialize and reset Intel 10G NIC regs.");
         
 
         Ok(())
+    }
+
+    fn enabel_interrup(&mut self) {
+        self.set_reg32(IXGBE_EIMS, 0x0000_0000);
+        self.set_reg32(IXGBE_EIMS, 1);
+        //enable queue 1 interrupt
+        self.set_reg32(IXGBE_EIAM, 1);
+
     }
 
     // sections 4.6.7
@@ -630,6 +639,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         */
         self.set_flags32(IXGBE_CTRL_EXT, 0x00010000);
         //enable CRC
+
 
         // configure queues, same for all queues
         for i in 0..self.num_rx_queues {
@@ -841,6 +851,13 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         self.set_reg32(IXGBE_TDT(u32::from(queue_id)), 0);
 
         // enable queue and wait if necessary
+        let mut txd_ctl = self.get_reg32(IXGBE_TXDCTL(u32::from(queue_id)));
+        txd_ctl |= 8;
+        txd_ctl |= 1 << 8;
+        txd_ctl |= 1 << 16;
+        self.set_reg32(IXGBE_TXDCTL(u32::from(queue_id)), txd_ctl);
+        info!("add some feature");
+
         self.set_flags32(IXGBE_TXDCTL(u32::from(queue_id)), IXGBE_TXDCTL_ENABLE);
         self.wait_set_reg32(IXGBE_TXDCTL(u32::from(queue_id)), IXGBE_TXDCTL_ENABLE);
 
