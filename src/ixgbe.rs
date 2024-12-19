@@ -691,7 +691,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         // start rx
         info!("enable rx");
         self.set_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
-        self.wait_set_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
+        //self.wait_set_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
         info!("finnal rx enabel");
 
         Ok(())
