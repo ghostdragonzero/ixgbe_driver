@@ -3069,7 +3069,7 @@ pub const IXGBE_TDWBAL_HEAD_WB_ENABLE: u32 = 0x1; /* Tx head write-back enable *
 pub const IXGBE_TDWBAL_SEQNUM_WB_ENABLE: u32 = 0x2; /* Tx seq# write-back enable */
 
 /* Receive Config masks */
-pub const IXGBE_RXCTRL_RXEN: u32 = 0x000000010; /* Enable Receiver */ //update
+pub const IXGBE_RXCTRL_RXEN: u32 = 1<<1; /* Enable Receiver */ //update
 pub const IXGBE_RXCTRL_DMBYPS: u32 = 0x00000002; /* Desc Monitor Bypass */
 pub const IXGBE_RXDCTL_ENABLE: u32 = 1 << 25; /* Ena specific Rx Queue */ //update
 pub const IXGBE_RXDCTL_SWFLSH: u32 = 0x04000000; /* Rx Desc wr-bk flushing */
