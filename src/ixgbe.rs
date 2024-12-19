@@ -577,7 +577,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 
         // section 4.6.7 - init rx
         self.init_rx(pool)?;
-        /*
+        
 
         // section 4.6.8 - init tx
         self.init_tx()?;
@@ -585,10 +585,12 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         for i in 0..self.num_rx_queues {
             self.start_rx_queue(i)?;
         }
+        
 
         for i in 0..self.num_tx_queues {
             self.start_tx_queue(i)?;
         }
+        
 
         // enable promisc mode by default to make testing easier
         self.set_promisc(true);
@@ -597,7 +599,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         self.wait_for_link();
 
         info!("Success to initialize and reset Intel 10G NIC regs.");
-        */
+        
 
         Ok(())
     }
@@ -687,7 +689,10 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         }
 
         // start rx
-        self.set_flags32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
+        info!("enable rx");
+        self.set_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
+        self.wait_set_reg32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
+        info!("finnal rx enabel");
 
         Ok(())
     }
@@ -696,6 +701,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
     /// Initializes the tx queues of this device.
     #[allow(clippy::needless_range_loop)]
     fn init_tx(&mut self) -> IxgbeResult {
+        /* 
         // crc offload and small packet padding
         self.set_flags32(IXGBE_HLREG0, IXGBE_HLREG0_TXCRCEN | IXGBE_HLREG0_TXPADEN);
 
@@ -704,10 +710,12 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         for i in 1..8 {
             self.set_reg32(IXGBE_TXPBSIZE(i), 0xff);
         }
+        */
 
         // required when not using DCB/VTd
         self.set_reg32(IXGBE_DTXMXSZRQ, 0xffff);
-        self.clear_flags32(IXGBE_RTTDCS, IXGBE_RTTDCS_ARBDIS);
+        //self.clear_flags32(IXGBE_RTTDCS, IXGBE_RTTDCS_ARBDIS);
+        //no DCB
 
         // configure queues
         for i in 0..self.num_tx_queues {
