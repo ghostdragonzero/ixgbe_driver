@@ -531,58 +531,53 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
     /// Resets and initializes the device.
     fn reset_and_init(&mut self, _pool: &Arc<MemPool>) -> IxgbeResult {
-        let mut mii_reg = self.phy_read(0);
-        mii_reg = self.phy_read(0);
-        mii_reg |= 1<<9;
-        info!("rs_atu write_mii{:b}", mii_reg);
-        self.phy_write(0, mii_reg);
-        //let status = self.get_reg32(IGB_STATUS);
-        //info!("reset end status {:b}", status);
-        loop{
-            let status = self.get_reg32(IGB_STATUS);
-            info!("status {:b}", status);
-            if (status &(1 << 1)) == (1<<1){
-                break;
-            }
-        }
-        /* 
+
+        
         info!("resetting device ixgbe device");
         // section 4.6.3.1 - disable all interrupts
         self.disable_interrupts();
+        
 
         // section 4.6.3.2
         self.set_reg32(IXGBE_CTRL, IXGBE_CTRL_RST_MASK);
         self.wait_clear_reg32(IXGBE_CTRL, IXGBE_CTRL_RST_MASK);
         // TODO: sleep 10 millis.
         let _ = H::wait_until(Duration::from_millis(1000));
+        
 
         // section 4.6.3.1 - disable interrupts again after reset
         self.disable_interrupts();
+        
 
         let mac = self.get_mac_addr();
         info!(
             "mac address: {:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}",
             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]
         );
+        
 
         // section 4.6.3 - wait for EEPROM auto read completion
-        self.wait_set_reg32(IXGBE_EEC, IXGBE_EEC_ARD);
+        //self.wait_set_reg32(IXGBE_EEC, IXGBE_EEC_ARD);
+         
 
         // section 4.6.3 - wait for dma initialization done
-        self.wait_set_reg32(IXGBE_RDRXCTL, IXGBE_RDRXCTL_DMAIDONE);
+       //self.wait_set_reg32(IXGBE_RDRXCTL, IXGBE_RDRXCTL_DMAIDONE);
 
         // skip last step from 4.6.3 - we don't want interrupts(ixy)
         // section 4.6.3 Enable interrupts.
 
         // section 4.6.4 - initialize link (auto negotiation)
         self.init_link();
+        
 
         // section 4.6.5 - statistical counters
         // reset-on-read registers, just read them once
         self.reset_stats();
+        
 
         // section 4.6.7 - init rx
         self.init_rx(pool)?;
+        /*
 
         // section 4.6.8 - init tx
         self.init_tx()?;
@@ -615,17 +610,21 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         self.clear_flags32(IXGBE_RXCTRL, IXGBE_RXCTRL_RXEN);
 
         // section 4.6.11.3.4 - allocate all queues and traffic to PB0
-        self.set_reg32(IXGBE_RXPBSIZE(0), IXGBE_RXPBSIZE_128KB);
+        /*self.set_reg32(IXGBE_RXPBSIZE(0), IXGBE_RXPBSIZE_128KB);
         for i in 1..8 {
             self.set_reg32(IXGBE_RXPBSIZE(i), 0);
         }
+        */
+        //defaut RX buffer size 64K
 
         // enable CRC offloading
+        /* 
         self.set_flags32(IXGBE_HLREG0, IXGBE_HLREG0_RXCRCSTRP);
         self.set_flags32(IXGBE_RDRXCTL, IXGBE_RDRXCTL_CRCSTRIP);
 
         // accept broadcast packets
         self.set_flags32(IXGBE_FCTRL, IXGBE_FCTRL_BAM);
+        */
 
         // configure queues, same for all queues
         for i in 0..self.num_rx_queues {
@@ -684,7 +683,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 
         // probably a broken feature, this flag is initialized with 1 but has to be set to 0
         for i in 0..self.num_rx_queues {
-            self.clear_flags32(IXGBE_DCA_RXCTRL(u32::from(i)), 1 << 12);
+            self.set_flags32(IXGBE_DCA_RXCTRL(u32::from(i)), 1 << 25);
         }
 
         // start rx
@@ -837,7 +836,8 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
 
     // see section 4.6.4
     /// Initializes the link of this device.
-    fn init_link(&self) {
+    fn init_link(&mut self) {
+        /* 
         // link auto-configuration register should already be set correctly, we're resetting it anyway
         self.set_reg32(
             IXGBE_AUTOC,
@@ -850,6 +850,21 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         // negotiate link
         self.set_flags32(IXGBE_AUTOC, IXGBE_AUTOC_AN_RESTART);
         // datasheet wants us to wait for the link here, but we can continue and wait afterwards
+        */
+        let mut mii_reg = self.phy_read(0);
+        mii_reg = self.phy_read(0);
+        mii_reg |= 1<<9;
+        info!("rs_atu write_mii{:b}", mii_reg);
+        self.phy_write(0, mii_reg);
+        //let status = self.get_reg32(IGB_STATUS);
+        //info!("reset end status {:b}", status);
+        loop{
+            let status = self.get_reg32(IGB_STATUS);
+            info!("status {:b}", status);
+            if (status &(1 << 1)) == (1<<1){
+                break;
+            }
+        }
     }
 
     /// Disable all interrupts for all queues.

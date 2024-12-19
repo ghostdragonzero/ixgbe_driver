@@ -123,9 +123,9 @@ pub fn IXGBE_BY_MAC(_hw: u32, _r: u32) -> u32 {
 }
 
 /* General Registers */
-pub const IXGBE_CTRL: u32 = 0x00000;
-pub const IXGBE_STATUS: u32 = 0x00008;
-pub const IXGBE_CTRL_EXT: u32 = 0x00018;
+pub const IXGBE_CTRL: u32 = 0x00000;//update
+pub const IXGBE_STATUS: u32 = 0x00008;//update
+pub const IXGBE_CTRL_EXT: u32 = 0x00018;//update
 pub const IXGBE_ESDP: u32 = 0x00020;
 pub const IXGBE_EODSDP: u32 = 0x00028;
 pub const IXGBE_I2CCTL_82599: u32 = 0x00028;
@@ -309,10 +309,10 @@ pub const IXGBE_EMC_DIODE2_THERM_LIMIT: u32 = 0x1A;
 pub const IXGBE_MAX_SENSORS: u32 = 3;
 
 /* Interrupt Registers */
-pub const IXGBE_EICR: u32 = 0x00800;
+pub const IXGBE_EICR: u32 = 0x01580;//update
 pub const IXGBE_EICS: u32 = 0x00808;
-pub const IXGBE_EIMS: u32 = 0x00880;
-pub const IXGBE_EIMC: u32 = 0x00888;
+pub const IXGBE_EIMS: u32 = 0x01524;//update
+pub const IXGBE_EIMC: u32 = 0x01528;//uppdate
 pub const IXGBE_EIAC: u32 = 0x00810;
 pub const IXGBE_EIAM: u32 = 0x00890;
 
@@ -399,43 +399,47 @@ pub const IXGBE_TFCS: u32 = 0x0CE00;
 
 /* Receive DMA Registers */
 pub fn IXGBE_RDBAL(i: u32) -> u32 {
+    //update
     if i < 64 {
-        0x01000 + i * 0x40
+        0x0C000 + i * 0x40
     } else {
         0x0D000 + ((i - 64) * 0x40)
     }
 }
 pub fn IXGBE_RDBAH(i: u32) -> u32 {
+    //update
     if i < 64 {
-        0x01004 + i * 0x40
+        0x0C004 + i * 0x40
     } else {
         0x0D004 + ((i - 64) * 0x40)
     }
 }
 pub fn IXGBE_RDLEN(i: u32) -> u32 {
+    //update
     if i < 64 {
-        0x01008 + i * 0x40
+        0x0C008 + i * 0x40
     } else {
         0x0D008 + ((i - 64) * 0x40)
     }
 }
 pub fn IXGBE_RDH(i: u32) -> u32 {
+    //update
     if i < 64 {
-        0x01010 + i * 0x40
+        0x0C010 + i * 0x40
     } else {
         0x0D010 + ((i - 64) * 0x40)
     }
 }
 pub fn IXGBE_RDT(i: u32) -> u32 {
     if i < 64 {
-        0x01018 + i * 0x40
+        0x0C018 + i * 0x40
     } else {
         0x0D018 + ((i - 64) * 0x40)
     }
 }
 pub fn IXGBE_RXDCTL(i: u32) -> u32 {
     if i < 64 {
-        0x01028 + i * 0x40
+        0x0C028 + i * 0x40
     } else {
         0x0D028 + ((i - 64) * 0x40)
     }
@@ -459,14 +463,16 @@ pub const IXGBE_STARCTRL: u32 = 0x03024;
  * 64-127: 0x0D014 + (n-64)*0x40;
  */
 pub fn IXGBE_SRRCTL(i: u32) -> u32 {
+//update
     if i <= 15 {
-        0x02100 + i * 4
+        0x0C00C + i * 0x40
     } else if i < 64 {
         0x01014 + i * 0x40
     } else {
         0x0D014 + ((i - 64) * 0x40)
     }
 }
+
 /*
  * Rx DCA Control Register:
  * 00-15 : 0x02200 + n*4;
@@ -475,7 +481,7 @@ pub fn IXGBE_SRRCTL(i: u32) -> u32 {
  */
 pub fn IXGBE_DCA_RXCTRL(i: u32) -> u32 {
     if i <= 15 {
-        0x02200 + i * 4
+        0x0C028 + i * 0x40
     } else if i < 64 {
         0x0100C + i * 0x40
     } else {
@@ -489,7 +495,7 @@ pub fn IXGBE_RXPBSIZE(i: u32) -> u32 {
     0x03C00 + i * 4
 }
 
-pub const IXGBE_RXCTRL: u32 = 0x03000;
+pub const IXGBE_RXCTRL: u32 = 0x01000;//update
 pub const IXGBE_DROPEN: u32 = 0x03D04;
 pub const IXGBE_RXPBSIZE_SHIFT: u32 = 10;
 pub const IXGBE_RXPBSIZE_MASK: u32 = 0x000FFC00;
@@ -1306,14 +1312,15 @@ pub const IXGBE_PRC255: u32 = 0x04064;
 pub const IXGBE_PRC511: u32 = 0x04068;
 pub const IXGBE_PRC1023: u32 = 0x0406C;
 pub const IXGBE_PRC1522: u32 = 0x04070;
-pub const IXGBE_GPRC: u32 = 0x04074;
-pub const IXGBE_BPRC: u32 = 0x04078;
-pub const IXGBE_MPRC: u32 = 0x0407C;
-pub const IXGBE_GPTC: u32 = 0x04080;
-pub const IXGBE_GORCL: u32 = 0x04088;
-pub const IXGBE_GORCH: u32 = 0x0408C;
-pub const IXGBE_GOTCL: u32 = 0x04090;
-pub const IXGBE_GOTCH: u32 = 0x04094;
+
+pub const IXGBE_GPRC: u32 = 0x04074;//update
+pub const IXGBE_BPRC: u32 = 0x04078;//update
+pub const IXGBE_MPRC: u32 = 0x0407C;//update
+pub const IXGBE_GPTC: u32 = 0x04080;//update
+pub const IXGBE_GORCL: u32 = 0x04088;//update
+pub const IXGBE_GORCH: u32 = 0x0408C;//update
+pub const IXGBE_GOTCL: u32 = 0x04090;//update
+pub const IXGBE_GOTCH: u32 = 0x04094;//update
 
 pub fn IXGBE_RNBC(i: u32) -> u32 {
     0x03FC0 + i * 4
@@ -1916,7 +1923,7 @@ pub const IXGBE_MHADD_MFS_SHIFT: u32 = 16;
 /* Extended Device Control */
 pub const IXGBE_CTRL_EXT_PFRSTD: u32 = 0x00004000; /* Physical Function Reset Done */
 pub const IXGBE_CTRL_EXT_NS_DIS: u32 = 0x00010000; /* No Snoop disable */
-pub const IXGBE_CTRL_EXT_RO_DIS: u32 = 0x00020000; /* Relaxed Ordering disable */
+pub const IXGBE_CTRL_EXT_RO_DIS: u32 = 0x00020000; /* Relaxed Ordering disable *///update
 pub const IXGBE_CTRL_EXT_DRV_LOAD: u32 = 0x10000000; /* Driver loaded bit for FW */
 
 /* Direct Cache Access (DCA) definitions */
@@ -3061,7 +3068,7 @@ pub const IXGBE_TDWBAL_HEAD_WB_ENABLE: u32 = 0x1; /* Tx head write-back enable *
 pub const IXGBE_TDWBAL_SEQNUM_WB_ENABLE: u32 = 0x2; /* Tx seq# write-back enable */
 
 /* Receive Config masks */
-pub const IXGBE_RXCTRL_RXEN: u32 = 0x00000001; /* Enable Receiver */
+pub const IXGBE_RXCTRL_RXEN: u32 = 0x000000010; /* Enable Receiver */ //update
 pub const IXGBE_RXCTRL_DMBYPS: u32 = 0x00000002; /* Desc Monitor Bypass */
 pub const IXGBE_RXDCTL_ENABLE: u32 = 0x02000000; /* Ena specific Rx Queue */
 pub const IXGBE_RXDCTL_SWFLSH: u32 = 0x04000000; /* Rx Desc wr-bk flushing */
@@ -3276,15 +3283,15 @@ pub const IXGBE_SRRCTL_BSIZEHDRSIZE_SHIFT: u32 = 2; /* 64byte resolution (>> 6)
                                                      */
 pub const IXGBE_SRRCTL_RDMTS_SHIFT: u32 = 22;
 pub const IXGBE_SRRCTL_RDMTS_MASK: u32 = 0x01C00000;
-pub const IXGBE_SRRCTL_DROP_EN: u32 = 0x10000000;
+pub const IXGBE_SRRCTL_DROP_EN: u32 = 1<<31;//update
 pub const IXGBE_SRRCTL_BSIZEPKT_MASK: u32 = 0x0000007F;
 pub const IXGBE_SRRCTL_BSIZEHDR_MASK: u32 = 0x00003F00;
 pub const IXGBE_SRRCTL_DESCTYPE_LEGACY: u32 = 0x00000000;
-pub const IXGBE_SRRCTL_DESCTYPE_ADV_ONEBUF: u32 = 0x02000000;
+pub const IXGBE_SRRCTL_DESCTYPE_ADV_ONEBUF: u32 = 0x02000000;//update
 pub const IXGBE_SRRCTL_DESCTYPE_HDR_SPLIT: u32 = 0x04000000;
 pub const IXGBE_SRRCTL_DESCTYPE_HDR_REPLICATION_LARGE_PKT: u32 = 0x08000000;
 pub const IXGBE_SRRCTL_DESCTYPE_HDR_SPLIT_ALWAYS: u32 = 0x0A000000;
-pub const IXGBE_SRRCTL_DESCTYPE_MASK: u32 = 0x0E000000;
+pub const IXGBE_SRRCTL_DESCTYPE_MASK: u32 = 0x0E000000;//update
 
 pub const IXGBE_RXDPS_HDRSTAT_HDRSP: u32 = 0x00008000;
 pub const IXGBE_RXDPS_HDRSTAT_HDRLEN_MASK: u32 = 0x000003FF;
