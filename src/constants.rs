@@ -343,7 +343,7 @@ pub const IXGBE_MIN_EITR: u32 = 8;
 
 pub fn IXGBE_EITR(i: u32) -> u32 {
     if i <= 23 {
-        0x00820 + i * 4
+        0x01680 + i * 4
     } else {
         0x012300 + ((i - 24) * 4)
     }

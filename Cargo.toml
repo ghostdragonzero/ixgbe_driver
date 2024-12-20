@@ -21,5 +21,5 @@ features = ["alloc", "log","medium-ethernet","proto-ipv4","socket-raw", "socket-
 
 
 [features]
-default = []
+default = ["irq"]
 irq = []

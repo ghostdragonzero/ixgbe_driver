@@ -427,7 +427,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         #[cfg(feature = "irq")]
         {
             for queue_id in 0..num_rx_queues {
-                dev.enable_msix_interrupt(queue_id);
+                dev.enable_msi_interrupt(queue_id);
             }
         }
 
@@ -473,7 +473,7 @@ impl<H: IxgbeHal, const QS: usize> IxgbeDevice<H, QS> {
         let mut mask: u32 = self.get_reg32(IXGBE_EIMS);
         mask |= 1 << queue_id;
         self.set_reg32(IXGBE_EIMS, mask);
-        debug!("Using MSI interrupts");
+        debug!("jiahui Using MSI interrupts");
     }
 
     #[cfg(feature = "irq")]
