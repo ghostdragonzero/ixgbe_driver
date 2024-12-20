@@ -3071,6 +3071,12 @@ pub const IXGBE_TDWBAL_SEQNUM_WB_ENABLE: u32 = 0x2; /* Tx seq# write-back enable
 /* Receive Config masks */
 pub const IXGBE_RXCTRL_RXEN: u32 = 1<<1; /* Enable Receiver */ //update
 pub const IXGBE_RXCTRL_DMBYPS: u32 = 0x00000002; /* Desc Monitor Bypass */
+pub const IGB_RCTL_SBP:u32 = 0x00000004;
+pub const IGB_RCTL_UPE:u32 = 0x00000008;
+pub const IGB_RCTL_MPE:u32 = 0x00000010;
+pub const IGB_RCTL_LPE:u32 = 0x00000020;
+pub const IGB_RCTL_VFE:u32 = 0x00040000;
+pub const IGB_RCTL_BAM:u32 = 0x00008000;
 pub const IXGBE_RXDCTL_ENABLE: u32 = 1 << 25; /* Ena specific Rx Queue */ //update
 pub const IXGBE_RXDCTL_SWFLSH: u32 = 0x04000000; /* Rx Desc wr-bk flushing */
 pub const IXGBE_RXDCTL_RLPMLMASK: u32 = 0x00003FFF; /* X540 supported only */
